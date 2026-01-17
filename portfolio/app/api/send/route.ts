@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';
 import EmailTemplate from '@/components/emails/EmailTemplate';
-import { renderToStaticMarkup } from 'react-dom/server'; // Usamos react-dom/server
+import { render } from '@react-email/render'; // Usaremos render de @react-email/render
+import React from 'react'; // Importar React para el tipado
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -34,16 +35,15 @@ export async function POST(req: NextRequest) {
 
     const { name, email, message } = parsed.data;
 
-    // 3. Renderizar el componente de React a un string de HTML estático
-    // Forzamos el tipo a 'any' temporalmente para evitar conflictos de tipado con componentes de servidor
-    const emailHtml = renderToStaticMarkup(EmailTemplate({ name, email, message }) as any);
+    // 3. Renderizar el componente de React a un string de HTML (ahora con await)
+    const emailHtml = await render(EmailTemplate({ name, email, message }) as React.ReactElement);
 
     // 4. Enviar el correo con Resend usando la propiedad 'html'
     const { data, error } = await resend.emails.send({
       from: 'Portfolio Contact <onboarding@resend.dev>', // Dominio verificado en Resend
       to: ['ing.javiernuma@gmail.com'],
       subject: `Nuevo mensaje de ${name} desde tu portafolio`,
-      html: emailHtml, // Usamos la propiedad 'html' con el string renderizado
+      html: emailHtml, // Ahora emailHtml es un string resuelto
       text: `Nombre: ${name}\nEmail: ${email}\nMensaje: ${message}`, // Versión de texto plano
     });
 
