@@ -1,5 +1,3 @@
-'use client'; // <-- Añadido para marcarlo como Client Component
-
 import React from 'react';
 
 interface EmailTemplateProps {
