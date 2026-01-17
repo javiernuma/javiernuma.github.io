@@ -2,7 +2,8 @@ name: Deploy Portfolio to Root GitHub Pages
 
 on:
   push:
-    branches: ["master"]
+    branches:
+      - master
   workflow_dispatch:
 
 permissions:
@@ -14,7 +15,7 @@ jobs:
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,28 +24,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # Eliminamos el caché para forzar una instalación limpia
-          # cache: 'npm'
-          # cache-dependency-path: 'portfolio/package-lock.json'
 
       - name: Install Dependencies
         run: npm install
         working-directory: ./portfolio
 
-      # --- NUEVO PASO DE VERIFICACIÓN ---
-      - name: Verify 'resend' installation
-        run: |
-          echo "Checking for resend in node_modules..."
-          if [ -d "portfolio/node_modules/resend" ]; then
-            echo "'resend' package found."
-          else
-            echo "'resend' package NOT found."
-            exit 1
-          fi
-
       - name: Build Next.js Site
         run: npm run build
         working-directory: ./portfolio
+        # --- AÑADE ESTA SECCIÓN ---
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
