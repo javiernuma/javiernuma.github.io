@@ -23,20 +23,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: 'npm'
-          cache-dependency-path: 'portfolio/package-lock.json'
+          # Eliminamos el caché para forzar una instalación limpia
+          # cache: 'npm'
+          # cache-dependency-path: 'portfolio/package-lock.json'
 
       - name: Install Dependencies
         run: npm install
         working-directory: ./portfolio
 
+      # --- NUEVO PASO DE VERIFICACIÓN ---
+      - name: Verify 'resend' installation
+        run: |
+          echo "Checking for resend in node_modules..."
+          if [ -d "portfolio/node_modules/resend" ]; then
+            echo "'resend' package found."
+          else
+            echo "'resend' package NOT found."
+            exit 1
+          fi
+
       - name: Build Next.js Site
         run: npm run build
         working-directory: ./portfolio
 
-      - name: Verify Build Output
-        run: ls -R
-## test
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
