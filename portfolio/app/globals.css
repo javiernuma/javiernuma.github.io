@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-cyan: #00d9ff;
+  --color-cyber-magenta: #e040fb;
+  --color-cyber-purple: #b942ff;
+  --color-bg-dark: #0a0e27;
+  --color-bg-card: #1a1f3a;
+  --color-bg-darker: #050810;
+  --color-text-gray: #94a3b8;
+
+  --animate-fade-in-up: fadeInUp 0.8s ease-out;
+  --animate-glow: glow 2s ease-in-out infinite;
+
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 217, 255, 0.5); }
+    50% { box-shadow: 0 0 40px rgba(0, 217, 255, 0.8); }
+  }
+
+  /* Animación Vertical: Bajada Lenta, Subida Rápida (Restaurada) */
+  @keyframes glitch-vertical-flow {
+    0% {
+      transform: translate(var(--glitch-x), -3px);
+      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    }
+    85% {
+      /* Bajada Lenta (ocupa la mayor parte del tiempo) */
+      transform: translate(var(--glitch-x), 3px);
+      clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    }
+    100% {
+      /* Subida Rápida (golpe de retorno) */
+      transform: translate(var(--glitch-x), -3px);
+      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    }
+  }
+}
+
+@layer base {
+  html, body {
+    background-color: var(--color-bg-dark);
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+
+  /* Forzar la fuente Orbitron en todos los encabezados */
+  h1, h2, h3 {
+    font-family: var(--font-orbitron), sans-serif;
+  }
+
+  ::selection {
+    background-color: var(--color-cyber-cyan);
+    color: #000;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background-image: linear-gradient(to right, var(--color-cyber-cyan), var(--color-cyber-magenta));
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /* Clase Glitch Text Avanzada (Restaurada) */
+  .glitch-text {
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(to right, #22D3EE, #9333EA);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-bg-dark);
+    opacity: 0.7;
+  }
+
+  .glitch-text::before {
+    --glitch-x: 3px; /* Desfase horizontal mínimo */
+    left: 0;
+    text-shadow: 2px 0 #00d9ff; /* Sombra cian pegada a la letra */
+    animation: glitch-vertical-flow 3s linear infinite;
+    background: transparent;
+    color: #22D3EE;
+    z-index: -1;
+  }
+
+  .glitch-text::after {
+    --glitch-x: -3px; /* Desfase horizontal mínimo */
+    left: 0;
+    text-shadow: -2px 0 #e040fb; /* Sombra magenta pegada a la letra */
+    animation: glitch-vertical-flow 3s linear infinite;
+    animation-delay: 0.15s; /* Pequeño retraso para el efecto de desfase */
+    background: transparent;
+    color: #9333EA;
+    z-index: -2;
+  }
+
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.3); /* Cian suave */
+    border-color: rgba(34, 211, 238, 0.8);
+  }
+
+  .border-glow {
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .border-glow:hover {
+    box-shadow: 0 0 25px rgba(0, 217, 255, 0.25);
+  }
+
+  .neon-text-pulse {
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+    animation: neonPulse 3s infinite alternate;
+  }
+}
+
+@keyframes neonPulse {
+  from {
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5),
+                 0 0 20px rgba(0, 217, 255, 0.3);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.8),
+                 0 0 30px rgba(0, 217, 255, 0.5),
+                 0 0 40px rgba(224, 64, 251, 0.3);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-10px);
+  }
+  75% {
+    transform: translateY(-30px) translateX(5px);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-cyber-cyan), var(--color-cyber-magenta));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00b8d4, #b942ff);
+}
