@@ -1,0 +1,70 @@
+# Nombre del Workflow
+name: Deploy Portfolio to Root GitHub Pages
+
+# Disparadores (Triggers)
+on:
+  # Se ejecuta automáticamente en cada push a la rama 'main'
+  push:
+    branches: ["main"]
+  # Permite ejecutarlo manualmente desde la pestaña "Actions" en GitHub
+  workflow_dispatch:
+
+# Permisos necesarios para el token de despliegue
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Definición de los trabajos (Jobs)
+jobs:
+  build-and-deploy:
+    # Nombre del trabajo que aparecerá en GitHub Actions
+    name: Build and Deploy
+    # El tipo de máquina virtual que se usará
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código del repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Configurar el entorno de Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          # Opcional: Habilitar caché para acelerar futuras instalaciones
+          cache: 'npm'
+          cache-dependency-path: 'portfolio/package-lock.json'
+
+      # 3. Instalar las dependencias del proyecto
+      - name: Install Dependencies
+        run: npm install
+        # ¡Importante! Especifica que el comando se ejecute dentro de la carpeta 'portfolio'
+        working-directory: ./portfolio
+
+      # 4. Construir el proyecto para producción
+      - name: Build Next.js Site
+        run: npm run build
+        working-directory: ./portfolio
+        # Opcional: Pasar variables de entorno si fueran necesarias en el build
+        # env:
+        #   NEXT_PUBLIC_EXAMPLE_VAR: ${{ secrets.EXAMPLE_VAR }}
+
+      # 5. Desplegar los archivos estáticos a la rama 'gh-pages'
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          # Token de GitHub para permitir que la acción haga push a tu repositorio
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # La carpeta que contiene los archivos estáticos generados por 'npm run build'
+          # La ruta es relativa a la raíz del repositorio
+          publish_dir: ./portfolio/out
+
+          # La rama a la que se subirán los archivos estáticos
+          # GitHub Pages servirá el contenido desde esta rama
+          publish_branch: gh-pages
+
+          # Forza la reescritura de la rama en cada despliegue para mantenerla limpia
+          force_orphan: true
