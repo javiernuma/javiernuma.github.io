@@ -5,45 +5,54 @@ import EmailTemplate from '@/components/emails/EmailTemplate';
 import { render } from '@react-email/render';
 import React from 'react';
 
-// Esquema de validación
+// Esquema de validación con Zod
 const contactSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  message: z.string().min(10),
-  honeypot: z.string().optional(), // Campo oculto anti-spam
+  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres.'),
+  email: z.string().email('El correo electrónico no es válido.'),
+  message: z.string().min(10, 'El mensaje debe tener al menos 10 caracteres.'),
+  honeypot: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
   try {
-    // Inicializar Resend dentro del handler para evitar errores de build estático
+    // Inicializamos Resend DENTRO de la función POST
     const resend = new Resend(process.env.RESEND_API_KEY);
-    
+
     const body = await req.json();
 
-    // Protección simple anti-spam (Honeypot)
     if (body.honeypot) {
-      return NextResponse.json({ message: 'Message received' }, { status: 200 });
+      return NextResponse.json({ message: 'Message received!' }, { status: 200 });
     }
 
-    const { name, email, message } = contactSchema.parse(body);
+    const parsed = contactSchema.safeParse(body);
 
-    // Renderizar el template a HTML
+    if (!parsed.success) {
+      const { errors } = parsed.error;
+      return NextResponse.json({ error: 'Datos inválidos.', details: errors }, { status: 400 });
+    }
+
+    const { name, email, message } = parsed.data;
+
     const emailHtml = await render(EmailTemplate({ name, email, message }) as React.ReactElement);
 
     const { data, error } = await resend.emails.send({
-      from: 'Portfolio Contact <onboarding@resend.dev>', // Usar dominio de prueba de Resend o uno propio verificado
-      to: ['ing.javiernuma@gmail.com'], // TU CORREO AQUÍ
-      subject: `Nuevo mensaje de ${name}`,
+      from: 'Portfolio Contact <onboarding@resend.dev>',
+      to: ['ing.javiernuma@gmail.com'],
+      subject: `Nuevo mensaje de ${name} desde tu portafolio`,
       html: emailHtml,
-      replyTo: email, // Para que puedas responder directamente al remitente
+      reply_to: email, // <-- Corregido: reply_to en lugar de replyTo
+      text: `Nombre: ${name}\nEmail: ${email}\nMensaje: ${message}`,
     });
 
     if (error) {
-      return NextResponse.json({ error }, { status: 500 });
+      console.error('Error al enviar el correo:', error);
+      return NextResponse.json({ error: 'Error al enviar el correo.' }, { status: 500 });
     }
 
-    return NextResponse.json({ message: 'Email sent successfully', data }, { status: 200 });
+    return NextResponse.json({ message: 'Mensaje enviado con éxito.', data }, { status: 200 });
+
   } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error('Error en la API:', error);
+    return NextResponse.json({ error: 'Error interno del servidor.' }, { status: 500 });
   }
 }
