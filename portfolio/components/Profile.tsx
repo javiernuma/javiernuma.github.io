@@ -5,14 +5,57 @@ import { Translation } from '@/lib/i18n';
 import SkillBar from './SkillBar';
 import { motion } from 'framer-motion';
 import ParticlesBackground from './ParticlesBackground';
-import { FaJava, FaAws } from 'react-icons/fa';
-import { SiSpringboot } from 'react-icons/si';
-import { RiTeamFill } from 'react-icons/ri';
+import { FaJava, FaAws, FaSitemap } from 'react-icons/fa';
+import { SiKubernetes, SiGooglecloud } from 'react-icons/si';
 
 // Helper para resaltar palabras clave
 const Highlight = ({ children, color = 'text-cyber-cyan' }: { children: React.ReactNode, color?: string }) => (
     <span className={`${color} font-bold`}>{children}</span>
 );
+
+// Función para resaltar palabras clave en el texto dinámico
+const renderWithHighlights = (text: string) => {
+    // Lista de palabras clave y sus colores
+    const keywords = [
+        { word: 'Senior Backend Engineer', color: 'text-cyber-cyan' },
+        { word: '9 años de experiencia', color: 'text-cyber-cyan' },
+        { word: 'Java', color: 'text-lime-400' },
+        { word: 'Spring Boot', color: 'text-lime-400' },
+        { word: 'Scala', color: 'text-pink-500' },
+        { word: 'ZIO', color: 'text-pink-500' },
+        { word: 'AWS', color: 'text-orange-400' },
+        { word: 'Event-Driven', color: 'text-purple-400' },
+        { word: 'Platform Engineering', color: 'text-blue-400' },
+        { word: '99.9% uptime', color: 'text-green-400' },
+        { word: '2M+ transacciones', color: 'text-green-400' },
+        { word: '70% en tiempos de despliegue', color: 'text-green-400' },
+        { word: 'Clean Architecture', color: 'text-yellow-400' },
+        { word: 'SOLID', color: 'text-yellow-400' },
+        { word: 'TDD', color: 'text-yellow-400' },
+    ];
+
+    let parts = [text];
+
+    keywords.forEach(({ word, color }) => {
+        const newParts: (string | React.ReactNode)[] = [];
+        parts.forEach((part) => {
+            if (typeof part === 'string') {
+                const split = part.split(word);
+                split.forEach((s, i) => {
+                    if (i > 0) {
+                        newParts.push(<Highlight key={`${word}-${i}`} color={color}>{word}</Highlight>);
+                    }
+                    newParts.push(s);
+                });
+            } else {
+                newParts.push(part);
+            }
+        });
+        parts = newParts;
+    });
+
+    return <>{parts}</>;
+};
 
 export default function Profile({ t }: { t: Translation['profile'] }) {
     return (
@@ -43,43 +86,70 @@ export default function Profile({ t }: { t: Translation['profile'] }) {
                             className="border border-cyber-cyan/30 rounded-xl p-8 bg-black/20 shadow-[0_0_30px_rgba(0,217,255,0.1)]"
                         >
                             <div className="space-y-6 text-text-gray font-mono text-base leading-relaxed">
-                                <p>
-                                    Desarrollador Senior de Software con más de <Highlight>7 años de experiencia</Highlight> liderando y construyendo soluciones robustas. Especializado en <Highlight color="text-lime-400">Java</Highlight> y el ecosistema <Highlight color="text-lime-400">Spring Framework</Highlight>, con sólidos conocimientos en multithreading, diseño orientado a objetos y TDD.
-                                </p>
-                                <p>
-                                    He trabajado en la integración de servicios cloud con <Highlight color="text-orange-400">AWS</Highlight> (EC2, S3, RDS, DynamoDB, IAM), optimización de bases de datos (SQL, Oracle, MySQL) y actualmente exploro <Highlight color="text-pink-500">Elixir & Phoenix</Highlight> para sistemas de alta concurrencia.
-                                </p>
-                                <p>
-                                    Me defino como una persona honesta y comprometida, con pasión por la innovación, la calidad del software y los entornos colaborativos de alto rendimiento.
-                                </p>
+                                <p>{renderWithHighlights(t.description1)}</p>
+                                <p>{renderWithHighlights(t.description2)}</p>
+                                <p>{renderWithHighlights(t.description3)}</p>
                             </div>
                         </motion.div>
 
                         {/* Tarjetas de Skills Principales */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                            {[
-                                { icon: FaJava, name: 'Java' },
-                                { icon: FaAws, name: 'AWS' },
-                                { icon: SiSpringboot, name: 'Spring' },
-                                { icon: RiTeamFill, name: 'Leadership' },
-                            ].map((tech, index) => {
-                                const Icon = tech.icon;
-                                return (
-                                    <motion.div
-                                        key={tech.name}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                                        className="bg-[#111827] border border-white/10 rounded-lg p-4 text-center group transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(0,217,255,0.2)] hover:-translate-y-1"
-                                    >
-                                        <div className="text-4xl mb-3 text-text-gray group-hover:text-cyber-cyan transition-all duration-300">
-                                            <Icon />
-                                        </div>
-                                        <p className="font-mono text-sm text-text-gray group-hover:text-white transition-colors duration-300">{tech.name}</p>
-                                    </motion.div>
-                                )
-                            })}
+                            {/* Java / Scala */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: 0 }}
+                                className="bg-[#111827] border border-white/10 rounded-lg p-4 text-center group transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(0,217,255,0.2)] hover:-translate-y-1"
+                            >
+                                <div className="text-4xl mb-3 text-text-gray group-hover:text-cyber-cyan transition-all duration-300 flex justify-center">
+                                    <FaJava />
+                                </div>
+                                <p className="font-mono text-sm text-text-gray group-hover:text-white transition-colors duration-300">Java / Scala</p>
+                            </motion.div>
+
+                            {/* Multi-Cloud (AWS + GCP) */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: 0.1 }}
+                                className="bg-[#111827] border border-white/10 rounded-lg p-4 text-center group transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(0,217,255,0.2)] hover:-translate-y-1"
+                            >
+                                <div className="text-4xl mb-3 text-text-gray group-hover:text-cyber-cyan transition-all duration-300 flex justify-center gap-3">
+                                    <FaAws />
+                                    <SiGooglecloud />
+                                </div>
+                                <p className="font-mono text-sm text-text-gray group-hover:text-white transition-colors duration-300">Multi-Cloud</p>
+                            </motion.div>
+
+                            {/* Architecture */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: 0.2 }}
+                                className="bg-[#111827] border border-white/10 rounded-lg p-4 text-center group transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(0,217,255,0.2)] hover:-translate-y-1"
+                            >
+                                <div className="text-4xl mb-3 text-text-gray group-hover:text-cyber-cyan transition-all duration-300 flex justify-center">
+                                    <FaSitemap />
+                                </div>
+                                <p className="font-mono text-sm text-text-gray group-hover:text-white transition-colors duration-300">Architecture</p>
+                            </motion.div>
+
+                            {/* Platform Eng */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: 0.3 }}
+                                className="bg-[#111827] border border-white/10 rounded-lg p-4 text-center group transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(0,217,255,0.2)] hover:-translate-y-1"
+                            >
+                                <div className="text-4xl mb-3 text-text-gray group-hover:text-cyber-cyan transition-all duration-300 flex justify-center">
+                                    <SiKubernetes />
+                                </div>
+                                <p className="font-mono text-sm text-text-gray group-hover:text-white transition-colors duration-300">Platform Eng</p>
+                            </motion.div>
                         </div>
                     </div>
 

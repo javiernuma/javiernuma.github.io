@@ -134,7 +134,6 @@ export default function Home() {
           {/* Copyright */}
           <div className="border-t border-cyber-cyan/10 pt-8 text-center">
             <p className="text-text-gray text-sm">{t.footer.rights}</p>
-            <p className="text-text-gray text-xs mt-2">Made with ❤️ using Next.js, TypeScript & Tailwind CSS</p>
           </div>
         </div>
       </footer>

@@ -7,13 +7,15 @@ import { useState } from 'react';
 import { Translation } from '@/lib/i18n';
 import { motion } from 'framer-motion';
 import { 
-    FaJava, FaPython, FaDocker, FaAws, FaAngular, FaHtml5 
+    FaJava, FaPython, FaDocker, FaAws, FaAngular, FaHtml5, FaReact 
 } from 'react-icons/fa';
 import { 
-    SiSpringboot, SiElixir, SiGo, SiKubernetes, SiGooglecloud, SiTypescript, SiReactivex 
+    SiSpringboot, SiElixir, SiGo, SiKubernetes, SiGooglecloud, SiTypescript, SiReactivex,
+    SiScala, SiPostgresql, SiMongodb, SiRedis, SiTerraform, SiGrafana, SiPrometheus,
+    SiGraphql, SiApachekafka, SiHibernate, SiHelm, SiIstio, SiElasticsearch
 } from 'react-icons/si';
 import { GrCycle } from 'react-icons/gr';
-import { TbSql } from 'react-icons/tb';
+import { TbSql, TbApi } from 'react-icons/tb';
 
 type Category = 'all' | 'backend' | 'cloud' | 'frontend';
 
@@ -21,21 +23,41 @@ export default function Stack({ t }: { t: Translation['stack'] }) {
     const [filter, setFilter] = useState<Category>('all');
 
     const technologies = [
+        // Backend
         { name: 'Java', icon: FaJava, category: 'backend' },
+        { name: 'Scala', icon: SiScala, category: 'backend' },
         { name: 'Spring Boot', icon: SiSpringboot, category: 'backend' },
         { name: 'Elixir', icon: SiElixir, category: 'backend' },
-        { name: 'Python', icon: FaPython, category: 'backend' },
         { name: 'Go', icon: SiGo, category: 'backend' },
+        { name: 'Python', icon: FaPython, category: 'backend' },
+        { name: 'Hibernate', icon: SiHibernate, category: 'backend' },
+        { name: 'PostgreSQL', icon: SiPostgresql, category: 'backend' },
         { name: 'Oracle/SQL', icon: TbSql, category: 'backend' },
+        { name: 'MongoDB', icon: SiMongodb, category: 'backend' },
+        { name: 'Redis', icon: SiRedis, category: 'backend' },
+        { name: 'Kafka', icon: SiApachekafka, category: 'backend' },
+        { name: 'GraphQL', icon: SiGraphql, category: 'backend' },
+        { name: 'gRPC/REST', icon: TbApi, category: 'backend' },
+
+        // Cloud & DevOps
         { name: 'AWS', icon: FaAws, category: 'cloud' },
         { name: 'Google Cloud', icon: SiGooglecloud, category: 'cloud' },
-        { name: 'Docker', icon: FaDocker, category: 'cloud' },
         { name: 'Kubernetes', icon: SiKubernetes, category: 'cloud' },
+        { name: 'Docker', icon: FaDocker, category: 'cloud' },
+        { name: 'Terraform', icon: SiTerraform, category: 'cloud' },
+        { name: 'Helm', icon: SiHelm, category: 'cloud' },
+        { name: 'Istio', icon: SiIstio, category: 'cloud' },
         { name: 'CI/CD', icon: GrCycle, category: 'cloud' },
-        { name: 'HTML', icon: FaHtml5, category: 'frontend' },
+        { name: 'Prometheus', icon: SiPrometheus, category: 'cloud' },
+        { name: 'Grafana', icon: SiGrafana, category: 'cloud' },
+        { name: 'ELK Stack', icon: SiElasticsearch, category: 'cloud' },
+
+        // Frontend
         { name: 'Angular', icon: FaAngular, category: 'frontend' },
+        { name: 'React/Next.js', icon: FaReact, category: 'frontend' },
         { name: 'TypeScript', icon: SiTypescript, category: 'frontend' },
         { name: 'RxJS', icon: SiReactivex, category: 'frontend' },
+        { name: 'HTML5', icon: FaHtml5, category: 'frontend' },
     ];
 
     const filtered = filter === 'all'
@@ -89,7 +111,7 @@ export default function Stack({ t }: { t: Translation['stack'] }) {
                                 {/* Glow Effect on Hover */}
                                 <div className="absolute inset-0 bg-gradient-to-br from-cyber-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                 
-                                <div className="text-4xl mb-4 relative z-10 text-text-gray group-hover:text-cyber-cyan transform group-hover:scale-110 transition-all duration-300">
+                                <div className="text-4xl mb-4 relative z-10 text-text-gray group-hover:text-cyber-cyan transform group-hover:scale-110 transition-all duration-300 flex justify-center">
                                     <Icon />
                                 </div>
                                 <h3 className="font-mono font-medium text-sm text-text-light group-hover:text-cyber-cyan transition-colors duration-300 relative z-10">

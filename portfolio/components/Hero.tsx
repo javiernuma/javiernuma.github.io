@@ -43,7 +43,6 @@ export default function Hero({ t }: { t: Translation['hero'] }) {
                             className="text-5xl lg:text-7xl font-heading font-bold mb-4 tracking-widest uppercase leading-tight"
                         >
                             <span className="text-white mr-4">JAVIER</span>
-                            {/* Restauramos la clase glitch-text */}
                             <span className="glitch-text inline-block" data-text={t.subtitle}>{t.subtitle}</span>
                         </motion.h1>
 
@@ -92,7 +91,10 @@ export default function Hero({ t }: { t: Translation['hero'] }) {
                                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                             </a>
                             <a
-                                href="#"
+                                href="/docs/hojadevidaDeveloper.pdf" // Ruta al archivo PDF
+                                download="Javier_Vidal_Numa_CV.pdf" // Nombre sugerido para la descarga
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="flex items-center gap-2 px-8 py-3 border border-cyber-cyan/50 text-cyber-cyan rounded-md font-bold uppercase tracking-wider hover:bg-cyber-cyan/10 transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,217,255,0.2)]"
                             >
                                 <span>↓</span>
@@ -120,24 +122,19 @@ export default function Hero({ t }: { t: Translation['hero'] }) {
                             {/* 2. Círculo Interior: Borde sólido fino */}
                             <div className="absolute inset-4 rounded-full border border-cyber-cyan/60" />
 
-                            {/* 3. La Imagen (Placeholder estilo NOC) */}
-                            <div className="absolute inset-6 rounded-full overflow-hidden bg-bg-card border border-white/10 relative group shadow-[0_0_30px_rgba(34,211,238,0.15)]">
-                                {/* Fondo simulado de monitores/datos */}
-                                <div className="absolute inset-0 bg-gradient-to-b from-bg-dark to-bg-card opacity-90 z-0" />
-                                <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] z-0" />
-                                
-                                {/* Placeholder del rostro */}
-                                <div className="absolute inset-0 flex items-center justify-center z-10">
-                                    <span className="text-9xl filter drop-shadow-[0_0_10px_rgba(0,217,255,0.5)]">
-                                        👨‍💻
-                                    </span>
-                                </div>
+                            {/* 3. La Imagen (Foto Real) */}
+                            <div className="absolute inset-6 rounded-full overflow-hidden bg-bg-card border border-white/10 shadow-[0_0_30px_rgba(34,211,238,0.15)] z-10 aspect-square">
+                                <img 
+                                    src="/images/javier-numa2.jpeg" 
+                                    alt="Javier Vidal Numa" 
+                                    className="w-full h-full object-cover"
+                                />
                                 
                                 {/* Efecto de escaneo sobre la imagen */}
                                 <motion.div 
                                     animate={{ top: ['0%', '100%', '0%'] }}
                                     transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                                    className="absolute left-0 right-0 h-1 bg-cyber-cyan/30 shadow-[0_0_10px_#00d9ff] z-20"
+                                    className="absolute left-0 right-0 h-1 bg-cyber-cyan/30 shadow-[0_0_10px_#00d9ff] z-20 pointer-events-none"
                                 />
                             </div>
 
@@ -156,7 +153,7 @@ export default function Hero({ t }: { t: Translation['hero'] }) {
                                         Experience
                                     </p>
                                     <p className="text-lg font-heading font-bold text-white">
-                                        7+ Years
+                                        9+ Years
                                     </p>
                                 </div>
                             </motion.div>
