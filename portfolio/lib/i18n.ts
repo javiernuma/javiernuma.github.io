@@ -105,7 +105,7 @@ export const translations = {
                     tags: ['Java', 'Spring Boot', 'Axon Framework', 'CQRS', 'Event Sourcing'],
                     demoUrl: 'https://github.com/javiernuma',
                     githubUrl: 'https://github.com/javiernuma',
-                    image: '/images/Event-Sourcing-CQRS-Reference-Architecture.png' // Imagen añadida
+                    image: '/images/Event-Sourcing-CQRS-Reference-Architecture.png'
                 },
                 {
                     title: 'Functional Reactive Microservices con Scala 3',
@@ -121,7 +121,7 @@ export const translations = {
                     tags: ['Terraform', 'AWS', 'Kubernetes', 'IaC', 'DevOps'],
                     demoUrl: 'https://github.com/javiernuma',
                     githubUrl: 'https://github.com/javiernuma',
-                    image: '/images/Cloud-Native-Infrastructure-Terraform.png'
+                    image: '/images/Cloud-Native-Infrastructure-Terraform.png' // Imagen vacía por defecto para mantener la consistencia de tipos
                 }
             ]
         },
@@ -277,7 +277,7 @@ export const translations = {
                     tags: ['Java', 'Spring Boot', 'Axon Framework', 'CQRS', 'Event Sourcing'],
                     demoUrl: 'https://github.com/javiernuma',
                     githubUrl: 'https://github.com/javiernuma',
-                    image: '/images/Event-Sourcing-CQRS-Reference-Architecture.png' // Imagen añadida
+                    image: '/images/Event-Sourcing-CQRS-Reference-Architecture.png'
                 },
                 {
                     title: 'Functional Reactive Microservices with Scala 3',
@@ -293,6 +293,7 @@ export const translations = {
                     tags: ['Terraform', 'AWS', 'Kubernetes', 'IaC', 'DevOps'],
                     demoUrl: 'https://github.com/javiernuma',
                     githubUrl: 'https://github.com/javiernuma',
+                    image: '' // Imagen vacía para consistencia
                 }
             ]
         },
