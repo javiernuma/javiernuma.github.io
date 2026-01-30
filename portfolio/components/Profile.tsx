@@ -34,7 +34,8 @@ const renderWithHighlights = (text: string) => {
         { word: 'TDD', color: 'text-yellow-400' },
     ];
 
-    let parts = [text];
+    // Declaramos explícitamente el tipo para que acepte strings y componentes React
+    let parts: (string | React.ReactNode)[] = [text];
 
     keywords.forEach(({ word, color }) => {
         const newParts: (string | React.ReactNode)[] = [];
