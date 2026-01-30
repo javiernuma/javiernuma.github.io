@@ -14,21 +14,30 @@ const contactSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  try {
-    // Inicializamos Resend DENTRO de la función POST
-    const resend = new Resend(process.env.RESEND_API_KEY);
+  // Configuración de CORS
+  const headers = new Headers();
+  headers.set('Access-Control-Allow-Origin', '*'); // O pon 'https://javiernuma.github.io' para más seguridad
+  headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  headers.set('Access-Control-Allow-Headers', 'Content-Type');
 
+  // Manejo de preflight request (OPTIONS)
+  if (req.method === 'OPTIONS') {
+    return new NextResponse(null, { status: 200, headers });
+  }
+
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const body = await req.json();
 
     if (body.honeypot) {
-      return NextResponse.json({ message: 'Message received!' }, { status: 200 });
+      return NextResponse.json({ message: 'Message received!' }, { status: 200, headers });
     }
 
     const parsed = contactSchema.safeParse(body);
 
     if (!parsed.success) {
       const { errors } = parsed.error;
-      return NextResponse.json({ error: 'Datos inválidos.', details: errors }, { status: 400 });
+      return NextResponse.json({ error: 'Datos inválidos.', details: errors }, { status: 400, headers });
     }
 
     const { name, email, message } = parsed.data;
@@ -40,19 +49,28 @@ export async function POST(req: NextRequest) {
       to: ['ing.javiernuma@gmail.com'],
       subject: `Nuevo mensaje de ${name} desde tu portafolio`,
       html: emailHtml,
-      reply_to: email, // <-- Corregido: reply_to en lugar de replyTo
+      reply_to: email,
       text: `Nombre: ${name}\nEmail: ${email}\nMensaje: ${message}`,
     });
 
     if (error) {
       console.error('Error al enviar el correo:', error);
-      return NextResponse.json({ error: 'Error al enviar el correo.' }, { status: 500 });
+      return NextResponse.json({ error: 'Error al enviar el correo.' }, { status: 500, headers });
     }
 
-    return NextResponse.json({ message: 'Mensaje enviado con éxito.', data }, { status: 200 });
+    return NextResponse.json({ message: 'Mensaje enviado con éxito.', data }, { status: 200, headers });
 
   } catch (error) {
     console.error('Error en la API:', error);
-    return NextResponse.json({ error: 'Error interno del servidor.' }, { status: 500 });
+    return NextResponse.json({ error: 'Error interno del servidor.' }, { status: 500, headers });
   }
+}
+
+// Manejador para OPTIONS explícito
+export async function OPTIONS() {
+  const headers = new Headers();
+  headers.set('Access-Control-Allow-Origin', '*');
+  headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  headers.set('Access-Control-Allow-Headers', 'Content-Type');
+  return new NextResponse(null, { status: 200, headers });
 }
