@@ -20,7 +20,10 @@ export default function Contact({ t }: { t: Translation['contact'] }) {
     const onSubmit = async (data: FormData) => {
         setStatus('sending');
         try {
-            const res = await fetch('/api/send', {
+            // URL de la API en Vercel para producción
+            const apiUrl = 'https://javiernuma-github-io.vercel.app/api/send';
+            
+            const res = await fetch(apiUrl, {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'application/json' },
@@ -36,6 +39,12 @@ export default function Contact({ t }: { t: Translation['contact'] }) {
             setTimeout(() => setStatus('idle'), 5000);
         }
     };
+
+    const contactItems = [
+        { icon: FaPhone, label: t.phone, value: '+57 3113413943', href: 'tel:+573113413943' },
+        { icon: FaEnvelope, label: t.email, value: 'ing.javiernuma@gmail.com', href: 'mailto:ing.javiernuma@gmail.com' },
+        { icon: FaLinkedin, label: t.linkedin, value: t.linkedinText, href: 'https://www.linkedin.com/in/ing-javier-vidal-numa-mendoza/' },
+    ];
 
     return (
         <section id="contact" className="py-20 px-6 bg-bg-darker relative overflow-hidden">
@@ -62,11 +71,7 @@ export default function Contact({ t }: { t: Translation['contact'] }) {
                             <p className="text-text-gray mb-8 font-sans">{t.subtitle}</p>
 
                             <div className="space-y-6 font-mono">
-                                {[
-                                    { icon: FaPhone, label: t.phone, value: '+57 3113413943', href: 'tel:+573113413943' },
-                                    { icon: FaEnvelope, label: t.email, value: 'ing.javiernuma@gmail.com', href: 'mailto:ing.javiernuma@gmail.com' },
-                                    { icon: FaLinkedin, label: t.linkedin, value: t.linkedinText, href: 'https://www.linkedin.com/in/ing-javier-vidal-numa-mendoza/' },
-                                ].map((item) => {
+                                {contactItems.map((item) => {
                                     const Icon = item.icon;
                                     return (
                                         <a 
